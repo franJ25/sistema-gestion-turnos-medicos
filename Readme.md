@@ -1,70 +1,252 @@
-# Trabajo Práctico Integrador – DAO: Sistema de Turnos Médicos
+# 🏥 Sistema de Turnos Médicos
 
-Este proyecto es un sistema de escritorio para la gestión completa de turnos médicos, desarrollado como parte del Trabajo Práctico Integrador de la materia DAO. La aplicación abarca desde la gestión de pacientes y médicos hasta la generación de reportes estadísticos.
+Sistema fullstack para la gestión integral de turnos médicos, diseñado para clínicas con múltiples sucursales, especialidades y roles de usuario. Permite a pacientes agendar turnos, a médicos gestionar su agenda y atender consultas, y a administradores controlar todo el sistema.
 
-## Descripción del Proyecto
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat-square&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.121-009688?style=flat-square&logo=fastapi&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-D71F00?style=flat-square&logo=sqlalchemy&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
 
-El objetivo principal es desarrollar una aplicación de gestión que combine una interfaz de usuario, una base de datos relacional y diversas funcionalidades de negocio. El sistema está diseñado para resolver la administración de un consultorio médico, permitiendo registrar pacientes, médicos, especialidades y turnos, además de ofrecer un módulo de historial clínico y la emisión de recetas electrónicas.
+---
 
-## Funcionalidades Principales
+## 📸 Capturas de pantalla
 
-*   **Gestión de Entidades (ABM):** Altas, bajas y modificaciones de pacientes, médicos y especialidades.
-*   **Registro de Turnos:** Asignación de turnos vinculando paciente, médico, fecha y estado.
-*   **Validación de Disponibilidad:** El sistema valida los horarios disponibles para evitar la superposición de turnos.
-*   **Historial Clínico:** Módulo para la gestión del historial clínico de los pacientes.
-*   **Recetas Electrónicas:** Emisión de recetas en formato digital.
+| Login con roles | Portal del paciente |
+|:---:|:---:|
+| ![Login](Documentación/screenshots/login.png) | ![Portal del paciente](Documentación/screenshots/home-paciente.png) |
 
-## Reportes y Estadísticas
+| Panel del médico — Gestión de turnos | Panel admin — Gestión de médicos |
+|:---:|:---:|
+| ![Turnos del médico](Documentación/screenshots/turnos-medico.png) | ![Gestión de médicos](Documentación/screenshots/gestion-medicos.png) |
 
-El sistema es capaz de generar los siguientes reportes:
+<details>
+<summary>📊 Ver reportes y estadísticas</summary>
 
-*   Listado de turnos por médico en un período determinado.
-*   Cantidad de turnos por especialidad.
-*   Listado de pacientes atendidos en un rango de fechas.
-*   Gráfico estadístico que compara la asistencia vs. inasistencia de pacientes.
+| Selector de reportes | Reporte de pacientes atendidos |
+|:---:|:---:|
+| ![Reportes](Documentación/screenshots/reporte-pacientes-inputs.png) | ![Pacientes atendidos](Documentación/screenshots/reporte-pacientes-output.png) |
 
-## Opciones Adicionales (Mayor Complejidad)
+| Distribución por especialidad |
+|:---:|
+| ![Por especialidad](Documentación/screenshots/reporte-pacientes-especialidad-output.png) |
 
-*   **Recordatorios Automáticos:** Envío de recordatorios de turnos por correo electrónico o notificaciones.
+</details>
 
-## Tecnologías Utilizadas
+---
 
-*   **Interfaz de Usuario:** A elección del grupo (Tkinter, Flet, PyQt, etc.).
-*   **Base de Datos:** SQLite o MySQL.
-*   **Lenguaje de Programación:** Python.
+## ✨ Funcionalidades
 
-## Documentación y Diseño
+### Portal del Paciente
+- Registro y login con autenticación JWT
+- Visualización de turnos disponibles por médico/especialidad
+- Agendamiento de turnos con validación de disponibilidad en tiempo real
+- Historial de turnos previos
 
-La planificación y el diseño conceptual del sistema son una parte fundamental del proyecto. La documentación incluye:
+### Panel del Médico
+- Gestión de agenda regular y excepcional (bloqueos, guardias extra)
+- Flujo completo de atención: Confirmar → Anunciar → Atender → Finalizar
+- Emisión de recetas electrónicas con medicamentos
+- Generación de recetas en PDF
+- Diagnósticos por turno
 
-*   **Diagrama Entidad-Relación (DER):** El modelo conceptual de la base de datos se encuentra en un archivo `.mdj`.
-*   **Diagramas de Clases y Casos de Uso:** Para ilustrar la estructura y el comportamiento del sistema.
+### Panel de Administración
+- ABM completo de pacientes, médicos, especialidades, sucursales y consultorios
+- Generación de reportes (por médico, por especialidad, pacientes atendidos)
+- Gráficos de asistencia vs. inasistencia
+- Gestión de roles y usuarios
 
-### Visualización del Diagrama Entidad-Relación
+### Sistema de Notificaciones
+- Recordatorios automáticos por email (24h y 2h antes del turno)
+- Ejecución con scheduler en segundo plano (APScheduler)
 
-Para visualizar el archivo del diagrama (`.mdj`), es necesario utilizar la herramienta de modelado **StarUML**. Puede descargarla desde su sitio web oficial:
+---
 
-*   **Descargar StarUML:** [https://staruml.io/download](https://staruml.io/download)
+## 🏗️ Arquitectura
 
-StarUML es un software de modelado que soporta UML (Lenguaje Unificado de Modelado) y permite crear distintos tipos de diagramas para el diseño de sistemas.
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        FRONTEND                             │
+│              Next.js 16 + React 19 + TypeScript             │
+│                                                             │
+│  ┌──────────┐  ┌──────────┐  ┌───────────┐                 │
+│  │  Portal   │  │  Médico  │  │   Admin   │  ← Roles       │
+│  │ Paciente  │  │  Panel   │  │   Panel   │                 │
+│  └──────────┘  └──────────┘  └───────────┘                 │
+│           │           │            │                        │
+│        Middleware JWT (protección por roles)                 │
+└────────────────────────┬────────────────────────────────────┘
+                         │ HTTP / REST API
+┌────────────────────────┴────────────────────────────────────┐
+│                        BACKEND                              │
+│                   FastAPI (Python)                           │
+│                                                             │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │                    API Layer                         │    │
+│  │  Routers: auth, turnos, pacientes, médicos,         │    │
+│  │  agendas, recetas, reportes, especialidades...      │    │
+│  └──────────────────────┬──────────────────────────────┘    │
+│                         │                                   │
+│  ┌──────────────────────┴──────────────────────────────┐    │
+│  │                 Service Layer                        │    │
+│  │  TurnoService, AgendaService, ReportService,        │    │
+│  │  NotificationService, RecetaService...              │    │
+│  └──────────────────────┬──────────────────────────────┘    │
+│                         │                                   │
+│  ┌──────────────────────┴──────────────────────────────┐    │
+│  │               Repository Layer                       │    │
+│  │  TurnoRepository, AgendaRepository,                  │    │
+│  │  MedicoRepository, PacienteRepository...             │    │
+│  └──────────────────────┬──────────────────────────────┘    │
+│                         │                                   │
+│  ┌──────────────────────┴──────────────────────────────┐    │
+│  │             Models (SQLAlchemy ORM)                   │    │
+│  │  13+ tablas con relaciones complejas                 │    │
+│  └─────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────┘
+```
 
-## Criterios de Evaluación
+---
 
-El proyecto será evaluado según los siguientes criterios:
+## 🎨 Patrones de Diseño
 
-*   **Planificación y diseño conceptual:** 10%
-*   **Diseño físico de base de datos:** 10%
-*   **ABM y validaciones:** 20%
-*   **Transacciones principales:** 20%
-*   **Reportes detallados:** 10%
-*   **Reportes estadísticos:** 10%
-*   **Extensiones de mayor complejidad:** 10%
-*   **Documentación y presentación final:** 10%
+### State Pattern — Ciclo de vida de turnos
+Los turnos siguen una máquina de estados finita con transiciones validadas. Cada estado es una clase que define las acciones permitidas, y las transiciones inválidas lanzan excepciones.
 
-## Autores
+```
+Pendiente → Confirmado → Anunciado → Atendido → Finalizado
+    │            │                       │
+    └→ Cancelado ←┘                      └→ Ausente
+```
 
-*	Guillermina Paola Contigiani
-*	Francisco Jalile
-*	Fabrizzio Alejandro Leonetti
-*	Yanella Esmeralda Odar Alejos
-*	Laureano Suppo
+### Strategy Pattern — Generación de reportes
+Diferentes tipos de reportes (`PorMédico`, `PorEspecialidad`, `Atendidos`, `GráficoAsistencias`) implementan una interfaz común `StrategyReports`. El `ReportService` selecciona la estrategia en runtime vía un `STRATEGY_MAP`.
+
+### Repository Pattern
+Cada entidad tiene un repository que encapsula el acceso a datos, desacoplando la lógica de negocio de SQLAlchemy.
+
+### Service Layer
+La lógica de negocio (validación de disponibilidad, verificación de FKs, transiciones de estado) está encapsulada en servicios que reciben repositorios inyectados.
+
+### Custom Domain Exceptions
+Excepciones semánticas del dominio (`RecursoNoEncontradoError`, `HorarioNoDisponibleError`, `TransicionInvalidaError`) reemplazan las excepciones genéricas, facilitando el manejo de errores en la capa API.
+
+---
+
+## 🗄️ Modelo de Datos
+
+El sistema utiliza un modelo relacional con 13+ tablas, incluyendo:
+
+- **Relaciones many-to-many**: Médicos ↔ Especialidades (tabla intermedia)
+- **Claves compuestas**: Turnos (Fecha + Hora + Paciente), Consultorios (Número + Sucursal)
+- **Foreign keys configuradas**: con CASCADE, RESTRICT y SET NULL según la semántica de cada relación
+- **Entidades principales**: Pacientes, Médicos, Especialidades, Sucursales, Consultorios, Turnos, Estados, Agendas Regulares, Agendas Excepcionales, Recetas, Medicamentos, Drogas, Roles, Usuarios
+
+---
+
+## 🚀 Cómo levantar el proyecto
+
+### Prerrequisitos
+- Python 3.11+
+- Node.js 18+
+- npm
+
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/franJ25/Sistema_Gestion_Turnos_Medicos.git
+cd Sistema_Gestion_Turnos_Medicos
+```
+
+### 2. Backend (FastAPI)
+```bash
+# Crear y activar entorno virtual
+cd app
+python -m venv venv
+source venv/bin/activate   # Linux/Mac
+# venv\Scripts\activate    # Windows
+
+# Instalar dependencias
+cd backend
+pip install -r requirements.txt
+
+# Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tus valores (secret key, credenciales SMTP)
+
+# Iniciar el servidor
+cd ../..
+uvicorn app.backend.main:app --reload
+```
+El backend estará disponible en `http://localhost:8000` y la documentación Swagger en `http://localhost:8000/docs`.
+
+### 3. Frontend (Next.js)
+```bash
+cd app/frontend
+
+# Instalar dependencias
+npm install
+
+# Configurar variables de entorno
+cp .env.example .env.local
+# Editar .env.local con tus valores
+
+# Iniciar el servidor de desarrollo
+npm run dev
+```
+El frontend estará disponible en `http://localhost:3000`.
+
+### 4. Datos de prueba (opcional)
+```bash
+# Desde la raíz del proyecto
+python scripts/seed_data.py
+```
+Esto crea usuarios de prueba con las siguientes credenciales:
+
+| Rol | Email | Contraseña |
+|-----|-------|------------|
+| Admin | admin@hospital.com | admin123 |
+| Médico | juan.perez@hospital.com | medico123 |
+| Paciente | pedro.gomez@email.com | paciente123 |
+
+### 5. Notificaciones por email (opcional)
+```bash
+python scripts/scheduler_main.py
+```
+Ejecuta un job en segundo plano que envía recordatorios por email.
+
+---
+
+## 📋 Roadmap
+
+- [ ] Tests unitarios y de integración
+- [ ] Módulo de historial clínico detallado
+- [ ] Dashboard con gráficos interactivos en el frontend
+- [ ] Containerización con Docker
+- [ ] Deploy en producción (Railway / Vercel)
+- [ ] Sistema de turnos recurrentes
+
+---
+
+## 🧰 Stack Tecnológico
+
+| Capa | Tecnología |
+|------|-----------|
+| **Frontend** | Next.js 16, React 19, TypeScript, TailwindCSS v4 |
+| **Backend** | FastAPI, Python 3.11+, SQLAlchemy 2.0, Pydantic v2 |
+| **Base de datos** | SQLite (desarrollo) |
+| **Autenticación** | JWT (python-jose + jose), bcrypt |
+| **Notificaciones** | smtplib + APScheduler |
+| **PDF** | ReportLab |
+| **Iconos** | Lucide React |
+
+---
+
+## 👥 Autores
+
+- Guillermina Paola Contigiani
+- Francisco Jalile
+- Fabrizzio Alejandro Leonetti
+- Yanella Esmeralda Odar Alejos
+- Laureano Suppo

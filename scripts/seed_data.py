@@ -347,7 +347,7 @@ def seed_users_and_pacientes(db: Session):
             "nombre": "Francisco",
             "apellido": "Jalile",
             "telefono": "11-7890-1235",
-            "email": "francisco2004jalile@gmail.com",
+            "email": "francisco.jalile@email.com",
         },
     ]
 

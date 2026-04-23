@@ -3,17 +3,18 @@ from app.backend.models.models import Turno, Medico, Paciente
 from datetime import date, timedelta, datetime, time 
 from typing import List
 
+import os
 import smtplib
 from email.message import EmailMessage
 
 # ----------------------------------------------------
-# 1. CONFIGURACIÓN SMTP 
+# 1. CONFIGURACIÓN SMTP (cargada desde variables de entorno)
 # ----------------------------------------------------
 
-SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587 
-SENDER_EMAIL = "yaneodar@gmail.com"  
-SENDER_PASSWORD = "zcoq evqh ghvo zcib" 
+SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
+SENDER_EMAIL = os.getenv("SENDER_EMAIL", "")
+SENDER_PASSWORD = os.getenv("SENDER_PASSWORD", "")
 
 class NotificationService:
 
@@ -22,10 +23,10 @@ class NotificationService:
 
     def _send_email_real(self, recipient_email: str, subject: str, body: str) -> bool:
         
-        # Validación de configuración
-        #if SENDER_EMAIL == "tu_correo_de_prueba@gmail.com":
-        #     print(f"❌ ERROR: Configuración SMTP no válida. Correo simulado a {recipient_email}")
-        #     return False
+        # Si no hay credenciales SMTP configuradas, omitir el envío
+        if not SENDER_EMAIL or not SENDER_PASSWORD:
+            print(f"⚠️ SMTP no configurado. Email a {recipient_email} omitido. (Configurar SENDER_EMAIL y SENDER_PASSWORD en .env)")
+            return False
 
         try:
             msg = EmailMessage()

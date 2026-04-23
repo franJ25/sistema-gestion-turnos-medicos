@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta, timezone
 from typing import Any, Union
 
@@ -8,9 +9,9 @@ from jose import jwt, JWTError
 # 1. CONFIGURACIÓN
 # ----------------------------------------------------
 
-# La clave secreta debe ser una cadena aleatoria y compleja.
-# ¡IMPORTANTE!: En producción, esto debe cargarse desde una variable de entorno.
-SECRET_KEY = "SUPER_CLAVE_FINAL_2025"
+# La clave secreta se carga desde una variable de entorno.
+# En desarrollo local, se puede definir en un archivo .env
+SECRET_KEY = os.getenv("BACKEND_SECRET_KEY", "dev-secret-key-change-in-production")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 # Token válido por 24 horas
 
