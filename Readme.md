@@ -155,8 +155,8 @@ El sistema utiliza un modelo relacional con 13+ tablas, incluyendo:
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/franJ25/Sistema_Gestion_Turnos_Medicos.git
-cd Sistema_Gestion_Turnos_Medicos
+git clone https://github.com/franJ25/sistema-gestion-turnos-medicos.git
+cd sistema-gestion-turnos-medicos
 ```
 
 ### 2. Backend (FastAPI)
